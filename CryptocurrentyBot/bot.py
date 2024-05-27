@@ -10,7 +10,7 @@ bot = telebot.TeleBot(config.TOKEN)
 logger.add(f"/home/{getuser()}/.config/bot.log")
 logger.debug("Starting bot")
 
-CRYPTOCURRENTYES: list = ["Bitcoin", "Ethereum", "USDT", "BNB", "Solana", "USDC", "XRP", "Dogecoin", "Toncoin", "Cardano"]
+CRYPTOCURRENTYES: list = ["Bitcoin", "Ethereum", "USDT", "BNB", "Solana", "USDC", "XRP", "Dogecoin", "Toncoin", "Cardano", "Notcoin", "Litecoin", "Lifeform"]
 
 
 @logger.catch
@@ -68,7 +68,10 @@ def buttons_and_help(message):
         cryptocurrency8 = types.KeyboardButton('Dogecoin')
         cryptocurrency9 = types.KeyboardButton('Toncoin')
         cryptocurrency10 = types.KeyboardButton('Cardano')
-        markup.row(cryptocurrency6, cryptocurrency7, cryptocurrency8, cryptocurrency9, cryptocurrency10)
+        cryptocurrency11 = types.KeyboardButton("Notcoin")
+        cryptocurrency12 = types.KeyboardButton("Litecoin")
+        cryptocurrency13 = types.KeyboardButton("Lifeform")
+        markup.row(cryptocurrency6, cryptocurrency7, cryptocurrency8, cryptocurrency9, cryptocurrency10, cryptocurrency11, cryptocurrency12, cryptocurrency13)
 
         bot.send_message(message.chat.id, 'Выберите одну криптовалюту из списка', reply_markup=markup)
 
@@ -104,6 +107,12 @@ def buttons_and_help(message):
 
     elif message.text == CRYPTOCURRENTYES[9]:
         bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[9], "cardano"))
+    elif message.text == CRYPTOCURRENTYES[10]:
+        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[10], "notcoin"))
+    elif message.text == CRYPTOCURRENTYES[11]:
+        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[11], "litecoin"))
+    elif message.text == CRYPTOCURRENTYES[12]:
+        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[12], "lifeform"))
 
     elif message.text == 'Перейти на TradingView':
         bot.send_message(message.chat.id, "Функционал не реализован.")
