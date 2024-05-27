@@ -1,2 +1,5 @@
 .venv
 .idea
+config/.env
+config/__pycache__
+CryptocurrentyBot/__pycache__
