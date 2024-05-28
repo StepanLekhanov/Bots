@@ -12,7 +12,7 @@ def get_data(coin: str, api_name_coin: str):
         logger.info(f"Get {coin} " + response.text)
         price = data[f'{api_name_coin}']['usd']
 
-        return f'Текущая цена {coin}: ${price}'
+        return f'{coin}: ${price}'
     else:
         logger.error("Превышена скорость запросов!")
         return "Превышена скорость запросов!"

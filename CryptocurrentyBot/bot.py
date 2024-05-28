@@ -5,6 +5,7 @@ from config import config
 from loguru import logger
 from text import *
 from getpass import getuser
+from database import Database
 
 bot = telebot.TeleBot(config.TOKEN)
 logger.add(f"/home/{getuser()}/.config/bot.log")
@@ -16,44 +17,111 @@ CRYPTOCURRENTYES: list = ["Bitcoin", "Ethereum", "USDT", "BNB", "Solana", "USDC"
 @logger.catch
 @bot.message_handler(commands=['start'])
 def start(message):
+    keyboard_lang = types.ReplyKeyboardMarkup()
+    ru_btn = types.KeyboardButton("Русский")
+    en_btn = types.KeyboardButton("English")
+    keyboard_lang.add(ru_btn, en_btn)
+
     logger.debug(message)
-    bot.send_message(message.chat.id, f'Добро пожаловать в Криптовалютного бота, {message.from_user.first_name}')
+
+    bot.send_message(message.chat.id, f'Добро пожаловать в Криптовалютного бота, {message.from_user.first_name}', reply_markup=keyboard_lang)
 
 
 @logger.catch
 @bot.message_handler(commands=['menu'])
 def menu_g(message):
+    lang = Database().get_lang(message.from_user.id)
+    if lang == "Русский":
+        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_RUS
+        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_RUS
+        menu = MENU_RUS
+        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_RUS
+    elif lang == "English":
+        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_ENG
+        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_ENG
+        menu = MENU_ENG
+        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_ENG
+
     markup = types.ReplyKeyboardMarkup()
-    button1 = types.KeyboardButton('Инструкция по использованию бота')
+    button1 = types.KeyboardButton(instruction_for_using_bot)
     markup.row(button1)
-    button2 = types.KeyboardButton('Поиск криптовалюты')
+    button2 = types.KeyboardButton(cryptocurrency_search)
     markup.row(button2)
-    button3 = types.KeyboardButton('Перейти на TradingView')
-    button4 = types.KeyboardButton('Перейти на биржу')
-    markup.row(button3, button4)
-    bot.send_message(message.chat.id, 'Главное меню', reply_markup=markup)
+    button4 = types.KeyboardButton(go_to_the_stock_exchange)
+    markup.row(button4)
+    bot.send_message(message.chat.id, menu, reply_markup=markup)
 
 
 @logger.catch
 @bot.message_handler(content_types=["text"])
 def buttons_and_help(message):
-    # Bot instruction
-    if message.text == 'Инструкция по использованию бота':
-        bot.send_message(message.chat.id, INSTRUCTION, parse_mode="html")
-    elif message.text == '1':
-        bot.send_message(message.chat.id, INSTRUCTION_1, parse_mode="html")
-    elif message.text == '2':
-        bot.send_message(message.chat.id, INSTRUCTION_2, parse_mode="html")
-    elif message.text == '3':
-        bot.send_message(message.chat.id, INSTRUCTION_3, parse_mode="html")
-    elif message.text == '4':
-        bot.send_message(message.chat.id, INSTRUCTION_4, parse_mode="html")
-    elif message.text == '5':
-        bot.send_message(message.chat.id, INSTRUCTION_5, parse_mode="html")
+    lang = Database().get_lang(message.from_user.id)
+    logger.debug(lang)
+    if lang == "Русский":
+        instruction = INSTRUCTION_0_RUS
+        instruction_1 = INSTRUCTION_1_RUS
+        instruction_2 = INSTRUCTION_2_RUS
+        instruction_3 = INSTRUCTION_3_RUS
+        instruction_4 = INSTRUCTION_4_RUS
+        instruction_5 = INSTRUCTION_5_RUS
 
-    elif message.text == 'Поиск криптовалюты':
+        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_RUS
+        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_RUS
+        select_one_cryptocurrency_from_the_list = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_RUS
+        menu = MENU_RUS
+        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_RUS
+        select_one_exchange_from_the_list = SELECT_ONE_EXCHANGE_FROM_THE_LIST_RUS
+
+        current_price: str = CURRENT_PRICE_RUS
+    elif lang == "English":
+        instruction = INSTRUCTION_0_ENG
+        instruction_1 = INSTRUCTION_1_ENG
+        instruction_2 = INSTRUCTION_2_ENG
+        instruction_3 = INSTRUCTION_3_ENG
+        instruction_4 = INSTRUCTION_4_ENG
+        instruction_5 = INSTRUCTION_5_ENG
+
+        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_ENG
+        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_ENG
+        select_one_cryptocurrency_from_the_list = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_ENG
+        menu = MENU_ENG
+        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_ENG
+        select_one_exchange_from_the_list = SELECT_ONE_EXCHANGE_FROM_THE_LIST_ENG
+
+        current_price: str = CURRENT_PRICE_ENG
+    else:
+        instruction = INSTRUCTION_0_ENG
+        instruction_1 = INSTRUCTION_1_ENG
+        instruction_2 = INSTRUCTION_2_ENG
+        instruction_3 = INSTRUCTION_3_ENG
+        instruction_4 = INSTRUCTION_4_ENG
+        instruction_5 = INSTRUCTION_5_ENG
+
+        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_ENG
+        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_ENG
+        select_one_cryptocurrency_from_the_list = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_ENG
+        menu = MENU_ENG
+        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_ENG
+        select_one_exchange_from_the_list = SELECT_ONE_EXCHANGE_FROM_THE_LIST_ENG
+
+        current_price: str = CURRENT_PRICE_ENG
+
+    if message.text == instruction_for_using_bot:
+        bot.send_message(message.chat.id, instruction, parse_mode="html")
+    elif message.text == '1':
+        bot.send_message(message.chat.id, instruction_1, parse_mode="html")
+    elif message.text == '2':
+        bot.send_message(message.chat.id, instruction_2, parse_mode="html")
+    elif message.text == '3':
+        bot.send_message(message.chat.id, instruction_3, parse_mode="html")
+    elif message.text == '4':
+        bot.send_message(message.chat.id, instruction_4, parse_mode="html")
+    elif message.text == '5':
+        bot.send_message(message.chat.id, instruction_5, parse_mode="html")
+
+    elif message.text == cryptocurrency_search:
         markup = types.ReplyKeyboardMarkup()
-        menu = types.KeyboardButton('Меню')
+        menu = types.KeyboardButton(menu)
         markup.row(menu)
 
         cryptocurrency1 = types.KeyboardButton('Bitcoin')
@@ -73,51 +141,74 @@ def buttons_and_help(message):
         cryptocurrency13 = types.KeyboardButton("Lifeform")
         markup.row(cryptocurrency6, cryptocurrency7, cryptocurrency8, cryptocurrency9, cryptocurrency10, cryptocurrency11, cryptocurrency12, cryptocurrency13)
 
-        bot.send_message(message.chat.id, 'Выберите одну криптовалюту из списка', reply_markup=markup)
+        bot.send_message(message.chat.id, select_one_cryptocurrency_from_the_list, reply_markup=markup)
 
-    elif message.text == 'Меню':
-        bot.send_message(message.chat.id, menu_g(message))
+    elif message.text == menu:
+        bot.send_message(message.chat.id, "" + menu_g(message))
 
     elif message.text == CRYPTOCURRENTYES[0]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[0], "bitcoin"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[0], "bitcoin"))
 
     elif message.text == CRYPTOCURRENTYES[1]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[1], "ethereum"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[1], "ethereum"))
 
     elif message.text == CRYPTOCURRENTYES[2]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[2], "tether"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[2], "tether"))
 
     elif message.text == CRYPTOCURRENTYES[3]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[3], "binancecoin"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[3], "binancecoin"))
 
     elif message.text == CRYPTOCURRENTYES[4]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[4], "solana"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[4], "solana"))
 
     elif message.text == CRYPTOCURRENTYES[5]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[5], "usd-coin"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[5], "usd-coin"))
 
     elif message.text == CRYPTOCURRENTYES[6]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[6], "ripple"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[6], "ripple"))
 
     elif message.text == CRYPTOCURRENTYES[7]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[7], "dogecoin"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[7], "dogecoin"))
 
     elif message.text == CRYPTOCURRENTYES[8]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[8], "the-open-network"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[8], "the-open-network"))
 
     elif message.text == CRYPTOCURRENTYES[9]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[9], "cardano"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[9], "cardano"))
+
     elif message.text == CRYPTOCURRENTYES[10]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[10], "notcoin"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[10], "notcoin"))
+
     elif message.text == CRYPTOCURRENTYES[11]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[11], "litecoin"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[11], "litecoin"))
+
     elif message.text == CRYPTOCURRENTYES[12]:
-        bot.send_message(message.chat.id, get_data(CRYPTOCURRENTYES[12], "lifeform"))
+        bot.send_message(message.chat.id, current_price + " " + get_data(CRYPTOCURRENTYES[12], "lifeform"))
 
-    elif message.text == 'Перейти на TradingView':
-        bot.send_message(message.chat.id, "Функционал не реализован.")
+    elif message.text == "Русский":
+        db = Database()
+        is_user_db = db.check_user(int(message.from_user.id))
+        if is_user_db:
+            if db.get_lang(message.from_user.id) == "English":
+                db.set_lang(message.from_user.id, "Русский")
+        else:
+            db.set_lang(message.from_user.id, "Русский")
 
-    elif message.text == 'Перейти на биржу':
+        bot.send_message(message.chat.id, "" + menu_g(message))
+
+    elif message.text == "English":
+        db = Database()
+        is_user_db = db.check_user(int(message.from_user.id))
+        logger.debug(is_user_db)
+        if is_user_db:
+            if db.get_lang(message.from_user.id) == "Русский":
+                db.set_lang(message.from_user.id, "English")
+        else:
+            db.set_lang(message.from_user.id, "English")
+
+        bot.send_message(message.chat.id, "" + menu_g(message))
+
+    elif message.text == go_to_the_stock_exchange:
         markup = types.InlineKeyboardMarkup()
 
         button1_exchange = types.InlineKeyboardButton(text="Bybit", url="https://www.bybit.com/ru-RU/")
@@ -130,4 +221,4 @@ def buttons_and_help(message):
         button6_exchange = types.InlineKeyboardButton(text='KuCoin', url="https://kucoin.com")
 
         markup.row(button4_exchange, button5_exchange, button6_exchange)
-        bot.send_message(message.chat.id, 'Выберите одну биржу из списка: ', reply_markup=markup)
+        bot.send_message(message.chat.id, select_one_exchange_from_the_list, reply_markup=markup)
