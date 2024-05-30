@@ -5,7 +5,7 @@ from loguru import logger
 
 class Database:
     def __init__(self) -> None:
-        self.connect: sqlite3.Connection = sqlite3.connect(config.DATABASE)
+        self.connect: sqlite3.Connection = sqlite3.connect(config.TEST_DATABASE)
         self.cursor: sqlite3.Cursor = self.connect.cursor()
 
     @logger.catch
@@ -36,12 +36,30 @@ class Database:
 
         return True
 
+    def get_notify(self) -> list:
+        """ Получение всех уведомлений пользователей"""
+        self.cursor.execute("SELECT * FROM users")
+        data: list = self.cursor.fetchall()
+        logger.debug(data)
+        return data
 
+    def set_notify(self, user_id, coin, price) -> None:
+        """ Установка уведомлений для пользователя """
+        self.cursor.execute(f"INSERT INTO users (user_id, user_coin_notify, user_target_price_notify) VALUES ('{user_id}', '{coin}', '{price}')")
+        self.connect.commit()
+
+    def del_notify(self, user_id, coin, price) -> None:
+        """ Установка уведомления """
+        self.cursor.execute("DELETE FROM users WHERE user_id = ? AND user_coin_notify = ? AND user_target_price_notify = ?", (user_id, coin, price,))
+        self.connect.commit()
+
+
+@logger.catch
 def create_db() -> None:
     """ Функция для создания файла бд """
-    connect: sqlite3.Connection = sqlite3.connect(config.DATABASE)
+    connect: sqlite3.Connection = sqlite3.connect(config.TEST_DATABASE)
     cursor: sqlite3.Cursor = connect.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id INTEGER NOT NULL, user_lang TEXT)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id INTEGER NOT NULL, user_lang TEXT, user_coin_notify TEXT, user_target_price_notify TEXT)")
     connect.commit()
     cursor.close()
     connect.close()

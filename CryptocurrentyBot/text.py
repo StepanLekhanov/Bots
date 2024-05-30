@@ -37,3 +37,10 @@ SELECT_ONE_EXCHANGE_FROM_THE_LIST_ENG: str = "Select one exchange from the list"
 
 CURRENT_PRICE_RUS: str = "Текущая цена"
 CURRENT_PRICE_ENG: str = "Current price"
+
+EXAMPLE_NOTIFY_RUS: str = "Пример /setnotify [имя монеты] [цена]"
+EXAMPLE_NOTIFY_ENG: str = "Example /setnotify [coin name] [price]"
+
+
+THE_NOTIFICATION_IS_SET_RUS = "Уведомление установлено!"
+THE_NOTIFICATION_IS_SET_ENG = "The notification is set!"
