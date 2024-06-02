@@ -1,7 +1,7 @@
 from bot import bot
 
 
-def main():
+def main() -> None:
     bot.polling(none_stop=True, interval=0, timeout=0)
 
 

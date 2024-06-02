@@ -42,5 +42,5 @@ EXAMPLE_NOTIFY_RUS: str = "Пример /setnotify [имя монеты] [цен
 EXAMPLE_NOTIFY_ENG: str = "Example /setnotify [coin name] [price]"
 
 
-THE_NOTIFICATION_IS_SET_RUS = "Уведомление установлено!"
-THE_NOTIFICATION_IS_SET_ENG = "The notification is set!"
+THE_NOTIFICATION_IS_SET_RUS: str = "Уведомление установлено!"
+THE_NOTIFICATION_IS_SET_ENG: str = "The notification is set!"

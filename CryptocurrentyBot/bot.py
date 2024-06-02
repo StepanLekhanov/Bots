@@ -38,13 +38,13 @@ def start(message):
 def menu_g(message):
     lang: str = Database().get_lang(message.chat.id)
     if lang == "Русский":
-        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_RUS
-        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_RUS
+        instruction_for_using_bot: str = INSTRUCTION_FOR_USING_BOT_RUS
+        cryptocurrency_search: str = CRYPTOCURRENCY_SEARCH_RUS
         menu = MENU_RUS
     elif lang == "English":
-        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_ENG
-        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_ENG
-        menu = MENU_ENG
+        instruction_for_using_bot: str = INSTRUCTION_FOR_USING_BOT_ENG
+        cryptocurrency_search: str = CRYPTOCURRENCY_SEARCH_ENG
+        menu: str = MENU_ENG
 
     markup: types.ReplyKeyboardMarkup = types.ReplyKeyboardMarkup()
     button1: types.KeyboardButton = types.KeyboardButton(instruction_for_using_bot)
@@ -81,51 +81,45 @@ def buttons_and_help(message):
     lang: str = Database().get_lang(message.from_user.id)
 
     if lang == "Русский":
-        instruction = INSTRUCTION_0_RUS
-        instruction_1 = INSTRUCTION_1_RUS
-        instruction_2 = INSTRUCTION_2_RUS
-        instruction_3 = INSTRUCTION_3_RUS
-        instruction_4 = INSTRUCTION_4_RUS
-        instruction_5 = INSTRUCTION_5_RUS
+        instruction: str = INSTRUCTION_0_RUS
+        instruction_1: str = INSTRUCTION_1_RUS
+        instruction_2: str = INSTRUCTION_2_RUS
+        instruction_3: str = INSTRUCTION_3_RUS
+        instruction_4: str = INSTRUCTION_4_RUS
+        instruction_5: str = INSTRUCTION_5_RUS
 
-        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_RUS
-        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_RUS
-        select_one_cryptocurrency_from_the_list = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_RUS
-        menu = MENU_RUS
-        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_RUS
-        select_one_exchange_from_the_list = SELECT_ONE_EXCHANGE_FROM_THE_LIST_RUS
+        instruction_for_using_bot: str = INSTRUCTION_FOR_USING_BOT_RUS
+        cryptocurrency_search: str = CRYPTOCURRENCY_SEARCH_RUS
+        select_one_cryptocurrency_from_the_list: str = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_RUS
+        menu: str = MENU_RUS
 
         current_price: str = CURRENT_PRICE_RUS
     elif lang == "English":
-        instruction = INSTRUCTION_0_ENG
-        instruction_1 = INSTRUCTION_1_ENG
-        instruction_2 = INSTRUCTION_2_ENG
-        instruction_3 = INSTRUCTION_3_ENG
-        instruction_4 = INSTRUCTION_4_ENG
-        instruction_5 = INSTRUCTION_5_ENG
+        instruction: str = INSTRUCTION_0_ENG
+        instruction_1: str = INSTRUCTION_1_ENG
+        instruction_2: str = INSTRUCTION_2_ENG
+        instruction_3: str = INSTRUCTION_3_ENG
+        instruction_4: str = INSTRUCTION_4_ENG
+        instruction_5: str = INSTRUCTION_5_ENG
 
-        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_ENG
-        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_ENG
-        select_one_cryptocurrency_from_the_list = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_ENG
-        menu = MENU_ENG
-        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_ENG
-        select_one_exchange_from_the_list = SELECT_ONE_EXCHANGE_FROM_THE_LIST_ENG
+        instruction_for_using_bot: str = INSTRUCTION_FOR_USING_BOT_ENG
+        cryptocurrency_search: str = CRYPTOCURRENCY_SEARCH_ENG
+        select_one_cryptocurrency_from_the_list: str = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_ENG
+        menu: str = MENU_ENG
 
         current_price: str = CURRENT_PRICE_ENG
     else:
-        instruction = INSTRUCTION_0_ENG
-        instruction_1 = INSTRUCTION_1_ENG
-        instruction_2 = INSTRUCTION_2_ENG
-        instruction_3 = INSTRUCTION_3_ENG
-        instruction_4 = INSTRUCTION_4_ENG
-        instruction_5 = INSTRUCTION_5_ENG
+        instruction: str = INSTRUCTION_0_ENG
+        instruction_1: str = INSTRUCTION_1_ENG
+        instruction_2: str = INSTRUCTION_2_ENG
+        instruction_3: str = INSTRUCTION_3_ENG
+        instruction_4: str = INSTRUCTION_4_ENG
+        instruction_5: str = INSTRUCTION_5_ENG
 
-        instruction_for_using_bot = INSTRUCTION_FOR_USING_BOT_ENG
-        cryptocurrency_search = CRYPTOCURRENCY_SEARCH_ENG
-        select_one_cryptocurrency_from_the_list = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_ENG
-        menu = MENU_ENG
-        go_to_the_stock_exchange = GO_TO_THE_STOCK_EXCHANGE_ENG
-        select_one_exchange_from_the_list = SELECT_ONE_EXCHANGE_FROM_THE_LIST_ENG
+        instruction_for_using_bot: str = INSTRUCTION_FOR_USING_BOT_ENG
+        cryptocurrency_search: str = CRYPTOCURRENCY_SEARCH_ENG
+        select_one_cryptocurrency_from_the_list: str = SELECT_ONE_CRYPTOCURRENCY_FROM_THE_LIST_ENG
+        menu: str = MENU_ENG
 
         current_price: str = CURRENT_PRICE_ENG
 
@@ -156,8 +150,8 @@ def buttons_and_help(message):
         bot.send_message(message.chat.id, menu_g(message))
 
     elif message.text == "Русский":
-        db = Database()
-        is_user_db = db.check_user(int(message.from_user.id))
+        db: Database = Database()
+        is_user_db: bool = db.check_user(int(message.from_user.id))
         if is_user_db:
             if db.get_lang(message.from_user.id) == "English":
                 db.set_lang(message.from_user.id, "Русский")
@@ -167,8 +161,8 @@ def buttons_and_help(message):
         bot.send_message(message.chat.id, menu_g(message))
 
     elif message.text == "English":
-        db = Database()
-        is_user_db = db.check_user(int(message.from_user.id))
+        db: Database = Database()
+        is_user_db: bool = db.check_user(int(message.from_user.id))
         logger.debug(is_user_db)
         if is_user_db:
             if db.get_lang(message.from_user.id) == "Русский":
@@ -177,21 +171,6 @@ def buttons_and_help(message):
             db.set_lang(message.from_user.id, "English")
 
         bot.send_message(message.chat.id, menu_g(message))
-
-    # elif message.text == go_to_the_stock_exchange:
-    #     markup = types.InlineKeyboardMarkup()
-    #
-    #     button1_exchange = types.InlineKeyboardButton(text="Bybit", url="https://www.bybit.com/ru-RU/")
-    #     button2_exchange = types.InlineKeyboardButton(text='OKX', url="https://okx.com")
-    #     button3_exchange = types.InlineKeyboardButton(text='Binance', url="https://binance.com")
-    #     markup.row(button1_exchange, button2_exchange, button3_exchange)
-    #
-    #     button4_exchange = types.InlineKeyboardButton(text='MEXC', url="https://mexc.com")
-    #     button5_exchange = types.InlineKeyboardButton(text='BingX', url="https://bingX.com")
-    #     button6_exchange = types.InlineKeyboardButton(text='KuCoin', url="https://kucoin.com")
-    #
-    #     markup.row(button4_exchange, button5_exchange, button6_exchange)
-    #     bot.send_message(message.chat.id, select_one_exchange_from_the_list, reply_markup=markup)
 
     # Вывод цен криптовалют
     for i in range(len(CRYPTOCURRENTYES)):
@@ -211,7 +190,7 @@ def check_price():
                 price: float = float(data[f'{coin}']['usd'])
                 logger.debug(f"{coin} - ${price}")
 
-                data = Database().get_notify()
+                data: list = Database().get_notify()
 
                 for i in range(len(data)):
                     user_id: str = data[i][0]
